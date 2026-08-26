@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.5" />
+  <title>Pizzaberg — Share Your Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ─────────────────────────────────── */
+    :root {
+      --cream: #F5F0E8;
+      --cream-2: #EDE7D9;
+      --rust: #B85C3A;
+      --rust-lt: #C9705A;
+      --gold: #B89A5A;
+      --charcoal: #2C2015;
+      --text: #3D2F1F;
+      --muted: #8C7B6A;
+      --white: #FFFDF8;
+      --divider: #D9CEBC;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+
+      --radius-pill: 50px;
+      --radius-card: 16px;
+      --shadow: 0 4px 24px rgba(44, 32, 21, 0.08);
+    }
+
+    /* ── RESET ───────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── WRAPPER ─────────────────────────────────── */
+    .page {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 0 48px;
+    }
+
+    /* ── HEADER ──────────────────────────────────── */
+    .header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px 32px;
+      gap: 12px;
+    }
+
+    .logo-mark {
+      width: 56px;
+      height: 60px;
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.22em;
+      font-weight: 400;
+      color: var(--charcoal);
+      text-transform: uppercase;
+    }
+
+    /* ── FEEDBACK SECTION ────────────────────────── */
+    .feedback {
+      width: 100%;
+      padding: 8px 24px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .feedback-headline {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 8vw, 2.6rem);
+      font-weight: 700;
+      color: var(--charcoal);
+      text-align: center;
+      line-height: 1.2;
+      max-width: 320px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-satisfied,
+    .btn-not-satisfied {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      text-decoration: none;
+      border: none;
+      white-space: nowrap;
+    }
+
+    .btn-satisfied {
+      background: var(--rust);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(184, 92, 58, 0.35);
+    }
+
+    .btn-satisfied:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(184, 92, 58, 0.4);
+    }
+
+    .btn-satisfied:active {
+      transform: translateY(0);
+    }
+
+    .btn-not-satisfied {
+      background: transparent;
+      color: var(--rust);
+      border: 1.5px solid var(--rust);
+    }
+
+    .btn-not-satisfied:hover {
+      background: rgba(184, 92, 58, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .btn-not-satisfied:active {
+      transform: translateY(0);
+    }
+
+    .btn-icon {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    /* ── HERO IMAGE ──────────────────────────────── */
+    .dish-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 28px 0 20px;
+    }
+
+    .dish-img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 12px 48px rgba(44, 32, 21, 0.18);
+    }
+
+    /* Placeholder dish (SVG-based, shown when no real image) */
+    .dish-placeholder {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: var(--cream-2);
+      box-shadow: 0 12px 48px rgba(44, 32, 21, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+    }
+
+    /* ── PROMO BANNER ────────────────────────────── */
+    .promo {
+      width: calc(100% - 32px);
+      margin: 8px 16px 0;
+      background: var(--cream-2);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .promo-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .promo-offer {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .promo-offer strong {
+      color: var(--rust);
+      font-weight: 700;
+    }
+
+    .promo-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .promo-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .promo-icons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-bubble {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .icon-bubble.wa {
+      background: #25D366;
+    }
+
+    .icon-bubble.email {
+      background: var(--gold);
+    }
+
+    .btn-join {
+      border: 1.5px solid var(--charcoal);
+      background: transparent;
+      color: var(--charcoal);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.18s, color 0.18s;
+    }
+
+    .btn-join:hover {
+      background: var(--charcoal);
+      color: var(--cream);
+    }
+
+    /* ── MODAL OVERLAY ───────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 32, 21, 0.55);
+      z-index: 100;
+      align-items: flex-end;
+      justify-content: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      padding: 32px 24px 40px;
+      width: 100%;
+      max-width: 480px;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(60px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--divider);
+      border-radius: 2px;
+      margin: 0 auto 24px;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .modal-sub {
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--divider);
+      border-radius: 10px;
+      background: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      outline: none;
+      transition: border-color 0.18s;
+    }
+
+    .field-input:focus {
+      border-color: var(--rust);
+    }
+
+    .field-input::placeholder {
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    .field-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--divider);
+      border-radius: 10px;
+      background: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238C7B6A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      transition: border-color 0.18s;
+    }
+
+    .field-select:focus {
+      border-color: var(--rust);
+    }
+
+    .field-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--divider);
+      border-radius: 10px;
+      background: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      outline: none;
+      resize: none;
+      height: 90px;
+      transition: border-color 0.18s;
+    }
+
+    .field-textarea:focus {
+      border-color: var(--rust);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--rust);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.18s;
+      box-shadow: 0 4px 16px rgba(184, 92, 58, 0.3);
+    }
+
+    .btn-submit:hover {
+      background: var(--rust-lt);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .btn-cancel {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    /* Star rating */
+    .stars {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    .star {
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: var(--divider);
+      transition: color 0.12s;
+      user-select: none;
+    }
+
+    .star.lit {
+      color: var(--gold);
+    }
+
+    /* Category chips for negative feedback */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .chip {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--divider);
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+
+    .chip.selected {
+      border-color: var(--rust);
+      background: rgba(184, 92, 58, 0.08);
+      color: var(--rust);
+      font-weight: 500;
+    }
+
+    /* Success screen */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 12px 0 8px;
+    }
+
+    .success.show {
+      display: block;
+    }
+
+    .success-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .success-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+
+    .success-msg {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── DIVIDER ─────────────────────────────────── */
+    .hr {
+      width: calc(100% - 48px);
+      height: 1px;
+      background: var(--divider);
+      margin: 36px auto 0;
+    }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    .footer {
+      width: 100%;
+      padding: 32px 24px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .footer-inner {
+      width: 100%;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      min-width: 100px;
+    }
+
+    .footer-logo-name {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      font-weight: 400;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      line-height: 1.1;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .social-icon {
+      width: 34px;
+      height: 34px;
+      border: 1.5px solid var(--divider);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--charcoal);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: border-color 0.18s, background 0.18s;
+    }
+
+    .social-icon:hover {
+      border-color: var(--rust);
+      background: rgba(184, 92, 58, 0.06);
+    }
+
+    .footer-divider {
+      width: 1px;
+      align-self: stretch;
+      background: var(--divider);
+    }
+
+    .footer-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 0.8rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .info-icon {
+      color: var(--rust);
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: 0.85rem;
+    }
+
+    /* ── TAGLINE ─────────────────────────────────── */
+    .tagline-wrap {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 24px;
+    }
+
+    .tagline-line {
+      flex: 1;
+      height: 1px;
+      background: var(--divider);
+    }
+
+    .tagline {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--rust);
+      white-space: nowrap;
+      font-style: italic;
+    }
+
+    .heart {
+      text-align: center;
+      color: var(--rust);
+      font-size: 1rem;
+      padding-top: 4px;
+    }
+
+    /* ── UTILITY ─────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- HEADER -->
+    <header class="header">
+      <img class="header-logo" src="assets/images/logo.jpg" alt="Pizzaburg" />
+    </header>
+
+    <!-- FEEDBACK -->
+    <section class="feedback">
+      <h1 class="feedback-headline">How was your experience today?</h1>
+
+      <div class="btn-row">
+        <button class="btn-satisfied" onclick="handleSatisfied()" aria-label="Satisfied">
+          <span class="btn-icon">☺</span> Satisfied
+        </button>
+        <button class="btn-not-satisfied" onclick="openFeedbackModal()" aria-label="Not Satisfied">
+          <span class="btn-icon">☹</span> Not Satisfied
+        </button>
+      </div>
+    </section>
+
+    <!-- DISH IMAGE -->
+    <div class="dish-wrap">
+      <div class="dish-placeholder" role="img" aria-label="Featured dish">🍽️</div>
+    </div>
+
+    <!-- PROMO BANNER -->
+    <div class="promo">
+      <div class="promo-left">
+        <p class="promo-offer"><strong>10% off</strong> your next visit</p>
+        <p class="promo-sub">Be the first to know about specials, events &amp; more.</p>
+      </div>
+      <div class="promo-right">
+        <div class="promo-icons">
+          <div class="icon-bubble wa" aria-label="WhatsApp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.068-1.112l-.292-.174-3.024.899.899-3.024-.174-.292A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8zm4.406-5.845c-.242-.121-1.433-.707-1.655-.787-.222-.08-.384-.121-.545.121-.16.242-.624.787-.765.948-.14.162-.281.182-.523.06-.242-.12-1.022-.376-1.946-1.2-.72-.641-1.206-1.433-1.347-1.675-.14-.242-.015-.373.106-.493.109-.108.242-.282.363-.423.12-.14.16-.242.242-.403.08-.161.04-.302-.02-.423-.06-.12-.545-1.314-.746-1.8-.197-.473-.397-.408-.545-.416-.14-.006-.302-.008-.463-.008-.162 0-.423.06-.645.303-.222.242-.846.828-.846 2.021s.866 2.344.986 2.505c.12.16 1.703 2.6 4.125 3.645.576.249 1.025.398 1.375.51.578.183 1.104.157 1.52.095.463-.069 1.433-.585 1.635-1.15.201-.565.201-1.049.14-1.15-.06-.101-.222-.161-.463-.282z" />
+            </svg>
+          </div>
+          <div class="icon-bubble email" aria-label="Email">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+            </svg>
+          </div>
+        </div>
+        <button class="btn-join" onclick="openPromoModal()">Join with WhatsApp / Email</button>
+      </div>
+    </div>
+
+    <!-- FOOTER DIVIDER -->
+    <div class="hr"></div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img class="footer-logo" src="assets/images/footer-logo.jpg" alt="Pizzaburg Footer Logo" />
+          <div class="footer-socials">
+            <a class="social-icon" href="https://instagram.com/your-page-here" aria-label="Instagram">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
+            </a>
+            <a class="social-icon" href="https://facebook.com/your-page-here" aria-label="Facebook">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+            </a>
+            <a class="social-icon" href="https://wa.me/15125550198" aria-label="WhatsApp">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.068-1.112l-.292-.174-3.024.899.899-3.024-.174-.292A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8zm4.406-5.845c-.242-.121-1.433-.707-1.655-.787-.222-.08-.384-.121-.545.121-.16.242-.624.787-.765.948-.14.162-.281.182-.523.06-.242-.12-1.022-.376-1.946-1.2-.72-.641-1.206-1.433-1.347-1.675-.14-.242-.015-.373.106-.493.109-.108.242-.282.363-.423.12-.14.16-.242.242-.403.08-.161.04-.302-.02-.423-.06-.12-.545-1.314-.746-1.8-.197-.473-.397-.408-.545-.416-.14-.006-.302-.008-.463-.008-.162 0-.423.06-.645.303-.222.242-.846.828-.846 2.021s.866 2.344.986 2.505c.12.16 1.703 2.6 4.125 3.645.576.249 1.025.398 1.375.51.578.183 1.104.157 1.52.095.463-.069 1.433-.585 1.635-1.15.201-.565.201-1.049.14-1.15-.06-.101-.222-.161-.463-.282z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-divider" aria-hidden="true"></div>
+
+        <div class="footer-info">
+          <div class="info-row">
+            <span class="info-icon">📍</span>
+            <span>Avenue Road Section:2 , Block: A, Avenue:1 , House: 12/1, Dhaka 1216</span>
+          </div>
+          <div class="info-row">
+            <span class="info-icon">📞</span>
+            <span>01908327868</span>
+          </div>
+          <div class="info-row">
+            <span class="info-icon">🕐</span>
+            <div>
+              Sat – Thu: 11:00 PM – 11:00 PM<br>
+              Fri : 2:00 PM – 11:00 PM<br>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tagline-wrap">
+        <div class="tagline-line" aria-hidden="true"></div>
+        <span class="tagline">Thank you for dining with us.</span>
+        <div class="tagline-line" aria-hidden="true"></div>
+      </div>
+      <div class="heart" aria-hidden="true">♥</div>
+    </footer>
+
+  </div><!-- /page -->
+
+
+  <!-- ══════════════════════════════════════════════
+     MODAL: NOT SATISFIED — Private Feedback Form
+════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="feedbackModal" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+    <div class="modal">
+      <div class="modal-handle" aria-hidden="true"></div>
+
+      <!-- Form view -->
+      <div id="feedbackFormView">
+        <h2 class="modal-title" id="feedbackTitle">We're sorry to hear that.</h2>
+        <p class="modal-sub">Tell us what went wrong — your feedback goes directly to our team, not online.</p>
+
+        <div class="field-group">
+          <div>
+            <label class="field-label">What area needs attention?</label>
+            <div class="chips" id="categoryChips">
+              <button class="chip" onclick="toggleChip(this)">Food quality</button>
+              <button class="chip" onclick="toggleChip(this)">Service speed</button>
+              <button class="chip" onclick="toggleChip(this)">Cleanliness</button>
+              <button class="chip" onclick="toggleChip(this)">Staff attitude</button>
+              <button class="chip" onclick="toggleChip(this)">Portion size</button>
+              <button class="chip" onclick="toggleChip(this)">Noise / Ambience</button>
+              <button class="chip" onclick="toggleChip(this)">Value for money</button>
+              <button class="chip" onclick="toggleChip(this)">Other</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="field-label" for="feedbackComment">Tell us more (optional)</label>
+            <textarea class="field-textarea" id="feedbackComment"
+              placeholder="What could we have done better?"></textarea>
+          </div>
+
+          <div>
+            <label class="field-label" for="feedbackContact">Your name or contact (optional)</label>
+            <input class="field-input" type="text" id="feedbackContact" placeholder="So we can follow up if needed" />
+          </div>
+        </div>
+
+        <button class="btn-submit" onclick="submitFeedback()">Send Feedback</button>
+        <button class="btn-cancel" onclick="closeModal('feedbackModal')">Cancel</button>
+      </div>
+
+      <!-- Success view -->
+      <div class="success" id="feedbackSuccess">
+        <div class="success-icon">🙏</div>
+        <div class="success-title">Thank you for telling us.</div>
+        <p class="success-msg">Our team will review your feedback and make it right. We appreciate you giving us the
+          chance to improve.</p>
+        <button class="btn-submit" style="margin-top:20px"
+          onclick="closeModal('feedbackModal');resetFeedbackForm()">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+     MODAL: JOIN PROMO — WhatsApp / Email
+════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="promoModal" role="dialog" aria-modal="true" aria-labelledby="promoTitle">
+    <div class="modal">
+      <div class="modal-handle" aria-hidden="true"></div>
+
+      <!-- Form view -->
+      <div id="promoFormView">
+        <h2 class="modal-title" id="promoTitle">Claim your 10% off</h2>
+        <p class="modal-sub">Enter your details below and we'll send your discount code right away.</p>
+
+        <div class="field-group">
+          <div>
+            <label class="field-label" for="promoName">Your name</label>
+            <input class="field-input" type="text" id="promoName" placeholder="First name" />
+          </div>
+          <div>
+            <label class="field-label" for="promoWhatsapp">WhatsApp number</label>
+            <input class="field-input" type="tel" id="promoWhatsapp" placeholder="+1 (555) 000-0000" />
+          </div>
+          <div>
+            <label class="field-label" for="promoEmail">Email address</label>
+            <input class="field-input" type="email" id="promoEmail" placeholder="you@example.com" />
+          </div>
+        </div>
+
+        <button class="btn-submit" onclick="submitPromo()">Get My Discount Code</button>
+        <button class="btn-cancel" onclick="closeModal('promoModal')">Maybe later</button>
+      </div>
+
+      <!-- Success view -->
+      <div class="success" id="promoSuccess">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">You're in!</div>
+        <p class="success-msg">Your 10% discount code is on its way. Look out for a message from us — and see you at the
+          table soon.</p>
+        <button class="btn-submit" style="margin-top:20px" onclick="closeModal('promoModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    /* ── URL PARAM: ?business=slug for multi-tenant ── */
+    (function applyBusinessConfig() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('business');
+
+      // Config map — in a real build this comes from a DB / API
+      const configs = {
+        'salt-ember': {
+          name: 'Pizzaberg',
+          tagline: 'Thank you for dining with us.',
+          reviewUrl: 'https://g.page/r/YOUR_GOOGLE_REVIEW_LINK',
+          address: 'Avenue Road Section:2 , Block: A, Avenue:1 , House: 12/1, Dhaka 1216',
+          phone: '01908327868',
+          hours: 'Mon–Thu 4–10 PM · Fri–Sat 4–11 PM · Sun 4–9 PM',
+        }
+        // Add more business IDs here
+      };
+
+      if (id && configs[id]) {
+        // Could dynamically update DOM elements here
+        console.log('Loaded config for:', configs[id].name);
+      }
+    })();
+
+    /* ── ROUTING LOGIC ───────────────────────────── */
+    function handleSatisfied() {
+      // Redirect to Google Review link — per business config
+      const reviewUrl = 'https://g.page/r/YOUR_GOOGLE_REVIEW_LINK/review';
+      // In production: window.location.href = reviewUrl;
+      // Demo: show a visual confirmation
+      showSatisfiedFeedback();
+    }
+
+    function showSatisfiedFeedback() {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+      position:fixed;inset:0;background:rgba(44,32,21,0.5);z-index:200;
+      display:flex;align-items:flex-end;justify-content:center;
+      backdrop-filter:blur(3px);
+    `;
+      overlay.innerHTML = `
+      <div style="background:#FFFDF8;border-radius:24px 24px 0 0;padding:32px 24px 44px;width:100%;max-width:480px;text-align:center;">
+        <div style="font-size:3rem;margin-bottom:12px;">⭐</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#2C2015;margin-bottom:8px;">Amazing! Thank you!</div>
+        <p style="font-size:0.875rem;color:#8C7B6A;margin-bottom:20px;">Would you mind sharing your experience on Google? It means the world to us.</p>
+        <a href="https://g.page/r/YOUR_GOOGLE_REVIEW_LINK" target="_blank"
+           style="display:block;width:100%;padding:14px;background:#B85C3A;color:#FFFDF8;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:500;text-decoration:none;box-shadow:0 4px 16px rgba(184,92,58,0.3);margin-bottom:10px;">
+          Leave a Google Review
+        </a>
+        <button onclick="this.closest('[style]').remove()"
+                style="background:none;border:none;color:#8C7B6A;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;padding:8px;">
+          No thanks
+        </button>
+      </div>
+    `;
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    }
+
+    function openFeedbackModal() {
+      document.getElementById('feedbackModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function openPromoModal() {
+      document.getElementById('promoModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ── CHIP TOGGLE ─────────────────────────────── */
+    function toggleChip(el) {
+      el.classList.toggle('selected');
+    }
+
+    /* ── FORM SUBMISSIONS ────────────────────────── */
+    function submitFeedback() {
+      const categories = [...document.querySelectorAll('#categoryChips .chip.selected')]
+        .map(c => c.textContent);
+      const comment = document.getElementById('feedbackComment').value;
+      const contact = document.getElementById('feedbackContact').value;
+
+      // In production: POST to your backend / Google Sheets / Zapier webhook
+      console.log('Private feedback:', { categories, comment, contact, timestamp: new Date().toISOString() });
+
+      // Show success
+      document.getElementById('feedbackFormView').style.display = 'none';
+      document.getElementById('feedbackSuccess').classList.add('show');
+    }
+
+    function resetFeedbackForm() {
+      document.querySelectorAll('#categoryChips .chip').forEach(c => c.classList.remove('selected'));
+      document.getElementById('feedbackComment').value = '';
+      document.getElementById('feedbackContact').value = '';
+      document.getElementById('feedbackFormView').style.display = '';
+      document.getElementById('feedbackSuccess').classList.remove('show');
+    }
+
+    function submitPromo() {
+      const name = document.getElementById('promoName').value;
+      const whatsapp = document.getElementById('promoWhatsapp').value;
+      const email = document.getElementById('promoEmail').value;
+
+      if (!whatsapp && !email) {
+        alert('Please enter at least a WhatsApp number or email address.');
+        return;
+      }
+
+      // In production: POST to Google Sheets + trigger automation (Zapier / Make.com)
+      console.log('Promo signup:', { name, whatsapp, email, timestamp: new Date().toISOString() });
+
+      // Show success
+      document.getElementById('promoFormView').style.display = 'none';
+      document.getElementById('promoSuccess').classList.add('show');
+    }
+
+    /* ── CLOSE MODAL ON OVERLAY CLICK ───────────── */
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+
+    /* ── KEYBOARD: ESC TO CLOSE ──────────────────── */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(m => {
+          m.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      }
+    });
+  </script>
+
+</body>
+
+</html>
