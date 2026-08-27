@@ -94,9 +94,8 @@ function closeAllModals() {
    ───────────────────────────────────────────────────────── */
 
 /**
- * Extracts the Place ID from a Google review URL.
- * Supports both ?placeid= and ?place_id= query param formats.
- * @param {string} url — full Google review URL
+ * Extract Place ID from a Google review URL.
+ * @param {string} url — e.g. "https://search.google.com/local/writereview?placeid=XYZ"
  * @returns {string|null}
  */
 function extractPlaceId(url) {
@@ -109,61 +108,65 @@ function extractPlaceId(url) {
 }
 
 /**
- * Opens the Google Review page in the most native way possible per platform.
- * - Android : fires an Android Intent to launch the Google Maps app directly
- *             into review mode; falls back to the web URL after 1.5 s if the
- *             app is not installed.
- * - iOS / Desktop : navigates to the standard web review URL (iOS will launch
- *                   the Maps app automatically if it is installed).
- * @param {string} placeId — Google Maps Place ID
- */
-function openGoogleReview(placeId) {
-  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-  // Standard Google Review URL
-  const webReviewUrl = `https://search.google.com/local/writereview?placeid=${placeId}`;
-
-  if (/android/i.test(userAgent)) {
-    // Chrome on Android blocks intent:// via window.location.href for security.
-    // The reliable fix is to fire it through a real anchor-element click,
-    // which Chrome treats as a trusted navigation and allows the intent through.
-    const androidIntent = `intent://search.google.com/local/writereview?placeid=${placeId}#Intent;scheme=https;package=com.google.android.apps.maps;end`;
-
-    const a = document.createElement('a');
-    a.href = androidIntent;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    // Fallback: if Google Maps app is not installed, open the web review page
-    setTimeout(function () {
-      window.location.href = webReviewUrl;
-    }, 1500);
-  } else {
-    // iOS (opens web review page; Apple doesn't support review deep-links in Maps app)
-    // Desktop: opens web review page in same tab
-    window.location.href = webReviewUrl;
-  }
-}
-
-/**
  * Called when the user taps "Satisfied".
- * Extracts the Place ID from the business config and triggers the
- * platform-aware Google Review redirect.
+ * Routes the user to the Google Review page for the business.
+ *
+ * Platform behavior:
+ *
+ *   ANDROID (Maps installed):
+ *     Opens the review composer directly inside the Google Maps app.
+ *     The user is already signed in on Maps, so no login prompt.
+ *     Uses /local/writereview/mobile — the path Maps registers as a
+ *     verified Android deep link — wrapped in an intent:// URL.
+ *     CRITICAL: No `package=` in the intent. That's what prevents
+ *     the Play Store fallback. Without it, Android simply tries to
+ *     resolve the HTTPS URL through verified links. If Maps handles
+ *     it → Maps opens. If not → browser_fallback_url kicks in.
+ *
+ *   ANDROID (Maps NOT installed / can't resolve):
+ *     Falls through to S.browser_fallback_url → the standard browser
+ *     review page. Never the Play Store.
+ *
+ *   DESKTOP:
+ *     Opens the standard review URL in the browser. Google shows the
+ *     review pop-up (star rating, comment box) directly on the page.
+ *
+ *   iOS:
+ *     Opens the standard review URL in Safari/Chrome.
  */
 function handleSatisfied() {
   const config = window.SE_CONFIG || {};
   const fallbackUrl = 'https://search.google.com/local/writereview?placeid=ChIJjb4WP-fAVTcRL8j4RRSSFM8';
   const reviewUrl = config.reviewUrl || fallbackUrl;
-
   const placeId = extractPlaceId(reviewUrl);
+  const ua = navigator.userAgent || '';
 
-  if (placeId) {
-    openGoogleReview(placeId);
+  if (/android/i.test(ua) && placeId) {
+    // ── ANDROID ──────────────────────────────────────────
+    // Target the /mobile path — Maps' verified deep link for
+    // the review composer. Omit `package=` so it can NEVER
+    // fall through to the Play Store.
+    const browserFallback = encodeURIComponent(reviewUrl);
+    const intentUrl =
+      'intent://search.google.com/local/writereview/mobile?placeid=' + placeId +
+      '#Intent;scheme=https;' +
+      'S.browser_fallback_url=' + browserFallback + ';end';
+
+    // Use a temporary <a> for reliable intent dispatch on Chrome Android
+    const a = document.createElement('a');
+    a.href = intentUrl;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { document.body.removeChild(a); }, 200);
+
   } else {
-    // Safety net: if Place ID can't be parsed, open the URL directly
-    window.location.href = reviewUrl;
+    // ── DESKTOP & iOS ────────────────────────────────────
+    // The standard review URL opens the pop-up review form
+    // directly in the browser (as shown in the screenshot).
+    // .replace() removes the feedback page from history so
+    // pressing Back won't loop back here.
+    window.location.replace(reviewUrl);
   }
 }
 
