@@ -1,0 +1,25 @@
+{
+  "name": "salt-ember-feedback",
+  "version": "1.0.0",
+  "description": "Customer feedback landing page for Pizzaberg restaurant",
+  "private": true,
+  "scripts": {
+    "start": "npx serve . --single --listen 3000",
+    "dev": "npx browser-sync start --server --files '**/*.html, assets/**/*' --open",
+    "lint:css": "npx stylelint assets/css/**/*.css",
+    "lint:js": "npx eslint assets/js/**/*.js",
+    "build": "echo 'Static site — no build step required. Deploy the project folder as-is.'"
+  },
+  "keywords": [
+    "restaurant",
+    "feedback",
+    "landing-page",
+    "salt-ember"
+  ],
+  "author": "Pizzaberg",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "browser-sync": "^3.0.2",
+    "serve": "^14.2.3"
+  }
+}
