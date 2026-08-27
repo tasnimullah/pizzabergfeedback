@@ -94,13 +94,77 @@ function closeAllModals() {
    ───────────────────────────────────────────────────────── */
 
 /**
+ * Extracts the Place ID from a Google review URL.
+ * Supports both ?placeid= and ?place_id= query param formats.
+ * @param {string} url — full Google review URL
+ * @returns {string|null}
+ */
+function extractPlaceId(url) {
+  try {
+    const u = new URL(url);
+    return u.searchParams.get('placeid') || u.searchParams.get('place_id') || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Opens the Google Review page in the most native way possible per platform.
+ * - Android : fires an Android Intent to launch the Google Maps app directly
+ *             into review mode; falls back to the web URL after 1.5 s if the
+ *             app is not installed.
+ * - iOS / Desktop : navigates to the standard web review URL (iOS will launch
+ *                   the Maps app automatically if it is installed).
+ * @param {string} placeId — Google Maps Place ID
+ */
+function openGoogleReview(placeId) {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  // Standard Google Review URL
+  const webReviewUrl = `https://search.google.com/local/writereview?placeid=${placeId}`;
+
+  if (/android/i.test(userAgent)) {
+    // Chrome on Android blocks intent:// via window.location.href for security.
+    // The reliable fix is to fire it through a real anchor-element click,
+    // which Chrome treats as a trusted navigation and allows the intent through.
+    const androidIntent = `intent://search.google.com/local/writereview?placeid=${placeId}#Intent;scheme=https;package=com.google.android.apps.maps;end`;
+
+    const a = document.createElement('a');
+    a.href = androidIntent;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    // Fallback: if Google Maps app is not installed, open the web review page
+    setTimeout(function () {
+      window.location.href = webReviewUrl;
+    }, 1500);
+  } else {
+    // iOS (opens web review page; Apple doesn't support review deep-links in Maps app)
+    // Desktop: opens web review page in same tab
+    window.location.href = webReviewUrl;
+  }
+}
+
+/**
  * Called when the user taps "Satisfied".
- * Redirects directly to the Google Review page — no popup.
+ * Extracts the Place ID from the business config and triggers the
+ * platform-aware Google Review redirect.
  */
 function handleSatisfied() {
   const config = window.SE_CONFIG || {};
-  const reviewUrl = config.reviewUrl || 'https://search.google.com/local/writereview?placeid=ChIJjb4WP-fAVTcRL8j4RRSSFM8';
-  window.open(reviewUrl, '_blank', 'noopener,noreferrer');
+  const fallbackUrl = 'https://search.google.com/local/writereview?placeid=ChIJjb4WP-fAVTcRL8j4RRSSFM8';
+  const reviewUrl = config.reviewUrl || fallbackUrl;
+
+  const placeId = extractPlaceId(reviewUrl);
+
+  if (placeId) {
+    openGoogleReview(placeId);
+  } else {
+    // Safety net: if Place ID can't be parsed, open the URL directly
+    window.location.href = reviewUrl;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────
