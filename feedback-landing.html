@@ -979,18 +979,42 @@
     }
 
     /* ── FORM SUBMISSIONS ────────────────────────── */
+    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwRCjMh9GORFU_Y-BkAWKLE3yNnEu7S172axMN8wPXvmwBEI_zwugXoWudRah-2WEga/exec';
+
     function submitFeedback() {
       const categories = [...document.querySelectorAll('#categoryChips .chip.selected')]
         .map(c => c.textContent);
       const comment = document.getElementById('feedbackComment').value;
       const contact = document.getElementById('feedbackContact').value;
 
-      // In production: POST to your backend / Google Sheets / Zapier webhook
-      console.log('Private feedback:', { categories, comment, contact, timestamp: new Date().toISOString() });
+      const payload = {
+        formType: 'feedback',
+        business: 'Pizzaberg',
+        categories,
+        comment,
+        contact,
+        timestamp: new Date().toISOString()
+      };
 
-      // Show success
-      document.getElementById('feedbackFormView').style.display = 'none';
-      document.getElementById('feedbackSuccess').classList.add('show');
+      const submitBtn = document.querySelector('#feedbackFormView .btn-submit');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+
+      const url = GOOGLE_SHEET_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
+      fetch(url, { method: 'GET', mode: 'no-cors' })
+        .then(() => {
+          document.getElementById('feedbackFormView').style.display = 'none';
+          document.getElementById('feedbackSuccess').classList.add('show');
+        })
+        .catch(err => {
+          console.error('Feedback submit error:', err);
+          alert('Something went wrong sending your feedback. Please try again.');
+        })
+        .finally(() => {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        });
     }
 
     function resetFeedbackForm() {
@@ -1037,8 +1061,6 @@
         mobileNumber: mobileNumber,
         timestamp: new Date().toISOString()
       };
-
-      const GOOGLE_SHEET_URL = '';
 
       const submitBtn = document.querySelector('#promoFormView .btn-submit');
       const originalText = submitBtn.textContent;
