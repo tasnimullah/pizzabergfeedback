@@ -719,25 +719,21 @@
     <!-- PROMO BANNER -->
     <div class="promo">
       <div class="promo-left">
-        <p class="promo-offer"><strong>10% off</strong> your next visit</p>
-        <p class="promo-sub">Be the first to know about specials, events &amp; more.</p>
+        <p class="promo-offer">Join our <strong>Birthday Club!</strong></p>
+        <p class="promo-sub">Get a FREE brownie/mocktail on your special day. Also get an instant 5% discount on today's
+          bill.</p>
       </div>
       <div class="promo-right">
         <div class="promo-icons">
-          <div class="icon-bubble wa" aria-label="WhatsApp">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <div class="icon-bubble gift" aria-label="Gift" style="background: var(--rust);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
               <path
-                d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.068-1.112l-.292-.174-3.024.899.899-3.024-.174-.292A7.96 7.96 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8zm4.406-5.845c-.242-.121-1.433-.707-1.655-.787-.222-.08-.384-.121-.545.121-.16.242-.624.787-.765.948-.14.162-.281.182-.523.06-.242-.12-1.022-.376-1.946-1.2-.72-.641-1.206-1.433-1.347-1.675-.14-.242-.015-.373.106-.493.109-.108.242-.282.363-.423.12-.14.16-.242.242-.403.08-.161.04-.302-.02-.423-.06-.12-.545-1.314-.746-1.8-.197-.473-.397-.408-.545-.416-.14-.006-.302-.008-.463-.008-.162 0-.423.06-.645.303-.222.242-.846.828-.846 2.021s.866 2.344.986 2.505c.12.16 1.703 2.6 4.125 3.645.576.249 1.025.398 1.375.51.578.183 1.104.157 1.52.095.463-.069 1.433-.585 1.635-1.15.201-.565.201-1.049.14-1.15-.06-.101-.222-.161-.463-.282z" />
-            </svg>
-          </div>
-          <div class="icon-bubble email" aria-label="Email">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                d="M22 8h-4.3c.2-.5.3-1 .3-1.5C18 4.6 16.4 3 14.5 3c-1.3 0-2.5.8-3.1 1.9L12 5.5l-.4-.6C11 3.8 9.8 3 8.5 3 6.6 3 5 4.6 5 6.5c0 .5.1 1 .3 1.5H1v3h2v10h18V11h2V8zM14.5 5c1 0 1.8.8 1.8 1.8S15.5 8.5 14.5 8.5h-2L14 6c.1-.6.5-1 1-1zM8.5 5c.5 0 1 .4 1 1l1.5 2.5h-2C8.2 8.5 7.4 7.7 7.4 6.8S8.2 5 9.1 5h-.6zM11 20H5v-9h6v9zm0-11H3V9h8v1zm8 11h-6v-9h6v9zm2-11h-8V9h8v1z" />
             </svg>
           </div>
         </div>
-        <button class="btn-join" onclick="openPromoModal()">Join with WhatsApp / Email</button>
+        <button class="btn-join" onclick="openPromoModal()">Join the Birthday Club</button>
       </div>
     </div>
 
@@ -869,8 +865,13 @@
 
       <!-- Form view -->
       <div id="promoFormView">
-        <h2 class="modal-title" id="promoTitle">Claim your 10% off</h2>
-        <p class="modal-sub">Enter your details below and we'll send your discount code right away.</p>
+        <h2 class="modal-title" id="promoTitle">Join the Birthday Club</h2>
+        <p class="modal-sub">Get a FREE brownie/mocktail on your special day. Also get an instant 5% discount on today's
+          bill.</p>
+
+        <div id="promoError"
+          style="display: none; color: #D32F2F; font-size: 0.85rem; margin-bottom: 12px; text-align: center; font-weight: 500;"
+          aria-live="polite"></div>
 
         <div class="field-group">
           <div>
@@ -878,16 +879,16 @@
             <input class="field-input" type="text" id="promoName" placeholder="First name" />
           </div>
           <div>
-            <label class="field-label" for="promoWhatsapp">WhatsApp number</label>
-            <input class="field-input" type="tel" id="promoWhatsapp" placeholder="+1 (555) 000-0000" />
+            <label class="field-label" for="promoBirthDate">Birth Date</label>
+            <input class="field-input" type="date" id="promoBirthDate" />
           </div>
           <div>
-            <label class="field-label" for="promoEmail">Email address</label>
-            <input class="field-input" type="email" id="promoEmail" placeholder="you@example.com" />
+            <label class="field-label" for="promoMobile">Mobile Number</label>
+            <input class="field-input" type="tel" id="promoMobile" placeholder="+880 1XXX XXXXXX" />
           </div>
         </div>
 
-        <button class="btn-submit" onclick="submitPromo()">Get My Discount Code</button>
+        <button class="btn-submit" onclick="submitPromo()">Join &amp; Get My Perks</button>
         <button class="btn-cancel" onclick="closeModal('promoModal')">Maybe later</button>
       </div>
 
@@ -895,8 +896,8 @@
       <div class="success" id="promoSuccess">
         <div class="success-icon">🎉</div>
         <div class="success-title">You're in!</div>
-        <p class="success-msg">Your 10% discount code is on its way. Look out for a message from us — and see you at the
-          table soon.</p>
+        <p class="success-msg">Your 5% discount is ready to use today. We'll send you a special treat during your birth
+          month!</p>
         <button class="btn-submit" style="margin-top:20px" onclick="closeModal('promoModal')">Close</button>
       </div>
     </div>
@@ -1001,21 +1002,63 @@
     }
 
     function submitPromo() {
-      const name = document.getElementById('promoName').value;
-      const whatsapp = document.getElementById('promoWhatsapp').value;
-      const email = document.getElementById('promoEmail').value;
+      const name = document.getElementById('promoName').value.trim();
+      const birthDate = document.getElementById('promoBirthDate').value;
+      const mobileNumber = document.getElementById('promoMobile').value.trim();
 
-      if (!whatsapp && !email) {
-        alert('Please enter at least a WhatsApp number or email address.');
+      const errorEl = document.getElementById('promoError');
+      errorEl.style.display = 'none';
+
+      if (!name) {
+        errorEl.textContent = 'Please enter your name.';
+        errorEl.style.display = 'block';
+        return;
+      }
+      if (!birthDate) {
+        errorEl.textContent = 'Please select your birth date.';
+        errorEl.style.display = 'block';
+        return;
+      }
+      if (!mobileNumber) {
+        errorEl.textContent = 'Please enter a valid mobile number.';
+        errorEl.style.display = 'block';
         return;
       }
 
-      // In production: POST to Google Sheets + trigger automation (Zapier / Make.com)
-      console.log('Promo signup:', { name, whatsapp, email, timestamp: new Date().toISOString() });
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('business');
+      const businessName = id ? id : 'Pizzaberg';
 
-      // Show success
-      document.getElementById('promoFormView').style.display = 'none';
-      document.getElementById('promoSuccess').classList.add('show');
+      const payload = {
+        formType: 'birthday',
+        business: businessName,
+        name: name,
+        birthDate: birthDate,
+        mobileNumber: mobileNumber,
+        timestamp: new Date().toISOString()
+      };
+
+      const GOOGLE_SHEET_URL = '';
+
+      const submitBtn = document.querySelector('#promoFormView .btn-submit');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+
+      const url = GOOGLE_SHEET_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
+      fetch(url, { method: 'GET', mode: 'no-cors' })
+        .then(() => {
+          document.getElementById('promoFormView').style.display = 'none';
+          document.getElementById('promoSuccess').classList.add('show');
+        })
+        .catch(err => {
+          console.error('Promo submit error:', err);
+          alert('Something went wrong. Please try again.');
+        })
+        .finally(() => {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        });
     }
 
     /* ── CLOSE MODAL ON OVERLAY CLICK ───────────── */

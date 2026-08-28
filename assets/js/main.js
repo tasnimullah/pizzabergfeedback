@@ -261,43 +261,56 @@ function openPromoModal() {
  */
 function submitPromo() {
   const name = document.getElementById('promoName').value.trim();
-  const whatsapp = document.getElementById('promoWhatsapp').value.trim();
-  const email = document.getElementById('promoEmail').value.trim();
+  const birthDate = document.getElementById('promoBirthDate').value;
+  const mobileNumber = document.getElementById('promoMobile').value.trim();
 
-  // Basic validation: at least one contact method required
-  if (!whatsapp && !email) {
-    showFieldError('Please enter at least a WhatsApp number or email address.');
+  const errorEl = document.getElementById('promoError');
+  if (errorEl) errorEl.style.display = 'none';
+
+  if (!name) {
+    showFieldError('Please enter your name.');
     return;
   }
-
-  // Optional: validate email format
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showFieldError('Please enter a valid email address.');
+  if (!birthDate) {
+    showFieldError('Please select your birth date.');
+    return;
+  }
+  if (!mobileNumber) {
+    showFieldError('Please enter a valid mobile number.');
     return;
   }
 
   const config = window.SE_CONFIG || {};
   const payload = {
+    formType: 'birthday',
     business: config.name || 'Pizzaberg',
     name,
-    whatsapp,
-    email,
+    birthDate,
+    mobileNumber,
     timestamp: new Date().toISOString(),
   };
 
-  // ── Production: POST to your webhook / CRM / Google Sheets ──
-  // fetch('https://hooks.zapier.com/hooks/catch/YOUR_PROMO_HOOK_ID/', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(payload),
-  // }).catch(err => console.error('Promo submit error:', err));
-  //
-  // ── Demo: log to console ──
-  console.log('[Pizzaberg] Promo sign-up:', payload);
+  const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwRCjMh9GORFU_Y-BkAWKLE3yNnEu7S172axMN8wPXvmwBEI_zwugXoWudRah-2WEga/exec';
 
-  // Show success state
-  document.getElementById('promoFormView').style.display = 'none';
-  document.getElementById('promoSuccess').classList.add('show');
+  const submitBtn = document.querySelector('#promoFormView .btn-submit');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = 'Sending...';
+  submitBtn.disabled = true;
+
+  const url = GOOGLE_SHEET_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
+  fetch(url, { method: 'GET', mode: 'no-cors' })
+    .then(() => {
+      document.getElementById('promoFormView').style.display = 'none';
+      document.getElementById('promoSuccess').classList.add('show');
+    })
+    .catch(err => {
+      console.error('Promo submit error:', err);
+      alert('Something went wrong. Please try again.');
+    })
+    .finally(() => {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    });
 }
 
 /**
@@ -314,6 +327,7 @@ function showFieldError(message) {
     submitBtn.parentNode.insertBefore(errEl, submitBtn);
   }
   errEl.textContent = message;
+  errEl.style.display = 'block';
 }
 
 /* ─────────────────────────────────────────────────────────
