@@ -1,4 +1,4 @@
-# 🔥 Pizzaberg — Feedback Landing Page
+# 🔥 Brand Name — Feedback Landing Page
 
 A polished, mobile-first restaurant feedback page built with **vanilla HTML, CSS, and JavaScript** — zero frameworks, zero build steps, instant hosting.
 
@@ -58,12 +58,12 @@ Open `assets/js/main.js` and edit the `BUSINESS_CONFIGS` map:
 
 ```js
 'salt-ember': {
-  name:      'Pizzaberg',
+  name:      'Brand Name',
   reviewUrl: 'https://g.page/r/YOUR_REAL_GOOGLE_REVIEW_LINK/review',
   whatsapp:  '15125550198',      // digits only, no spaces
   email:     'hello@saltember.com',
-  address:   'Avenue Road Section:2 , Block: A, Avenue:1 , House: 12/1, Dhaka 1216',
-  phone:     '01908327868',
+  address:   'Brand Address',
+  phone:     'Brand Phone Number',
 },
 ```
 
@@ -178,4 +178,4 @@ Or connect the repo at [vercel.com/new](https://vercel.com/new) and set:
 
 ## License
 
-Private / Proprietary — for internal use at Pizzaberg only.
+Private / Proprietary — for internal use at Brand Name only.

@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.5" />
-  <title>Pizzaberg — Share Your Experience</title>
+  <title>Brand Name — Share Your Experience</title>
   <meta name="description"
-    content="How was your dining experience at Pizzaberg? Share feedback privately or leave a Google review. Join our community for exclusive offers." />
-  <meta property="og:title" content="Pizzaberg — Share Your Experience" />
+    content="How was your dining experience at Brand Name? Share feedback privately or leave a Google review. Join our community for exclusive offers." />
+  <meta property="og:title" content="Brand Name — Share Your Experience" />
   <meta property="og:description" content="Tell us how your visit went. We'd love to hear from you." />
   <link rel="icon" type="image/jpeg" href="assets/images/featured-dish.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -772,11 +772,11 @@
         <div class="footer-info">
           <div class="info-row">
             <span class="info-icon">📍</span>
-            <span>Avenue Road Section:2 , Block: A, Avenue:1 , House: 12/1, Dhaka 1216</span>
+            <span>Brand Address</span>
           </div>
           <div class="info-row">
             <span class="info-icon">📞</span>
-            <span>01908327868</span>
+            <span>Brand Phone Number</span>
           </div>
           <div class="info-row">
             <span class="info-icon">🕐</span>
@@ -794,7 +794,7 @@
         <span class="tagline">Thank you for dining with us.</span>
         <div class="tagline-line" aria-hidden="true"></div>
       </div>
-      <div class="heart" aria-hidden="true">Contact TR For Support</div>
+      <div class="heart" aria-hidden="true">Contact NexInsight For Support</div>
     </footer>
 
   </div><!-- /page -->
@@ -913,11 +913,11 @@
       // Config map — in a real build this comes from a DB / API
       const configs = {
         'salt-ember': {
-          name: 'Pizzaberg',
+          name: 'Brand Name',
           tagline: 'Thank you for dining with us.',
           reviewUrl: 'https://search.google.com/local/writereview?placeid=ChIJjb4WP-fAVTcRL8j4RRSSFM8',
-          address: 'Avenue Road Section:2 , Block: A, Avenue:1 , House: 12/1, Dhaka 1216',
-          phone: '01908327868',
+          address: 'Brand Address',
+          phone: 'Brand Phone Number',
           hours: 'Mon–Thu 4–10 PM · Fri–Sat 4–11 PM · Sun 4–9 PM',
         }
         // Add more business IDs here
@@ -989,7 +989,7 @@
 
       const payload = {
         formType: 'feedback',
-        business: 'Pizzaberg',
+        business: 'Brand Name',
         categories,
         comment,
         contact,
@@ -1051,7 +1051,7 @@
 
       const params = new URLSearchParams(window.location.search);
       const id = params.get('business');
-      const businessName = id ? id : 'Pizzaberg';
+      const businessName = id ? id : 'Brand Name';
 
       const payload = {
         formType: 'birthday',

@@ -1,7 +1,7 @@
 {
   "name": "salt-ember-feedback",
   "version": "1.0.0",
-  "description": "Customer feedback landing page for Pizzaberg restaurant",
+  "description": "Customer feedback landing page for Brand Name restaurant",
   "private": true,
   "scripts": {
     "start": "npx serve . --single --listen 3000",
@@ -16,7 +16,7 @@
     "landing-page",
     "salt-ember"
   ],
-  "author": "Pizzaberg",
+  "author": "Brand Name",
   "license": "UNLICENSED",
   "devDependencies": {
     "browser-sync": "^3.0.2",

@@ -1,5 +1,5 @@
 /**
- * Pizzaberg — Feedback Landing Page
+ * Brand Name — Feedback Landing Page
  * main.js  |  Vanilla JS, no dependencies
  *
  * Sections:
@@ -20,14 +20,14 @@
    Pass ?business=<slug> in the URL to load a specific config.
    ───────────────────────────────────────────────────────── */
 const BUSINESS_CONFIGS = {
-  'pizzaberg': {
-    name: 'Pizzaberg',
+  'Brand Name': {
+    name: 'Brand Name',
     tagline: 'Thank you for dining with us.',
     reviewUrl: 'https://search.google.com/local/writereview?placeid=ChIJjb4WP-fAVTcRL8j4RRSSFM8',
     whatsapp: '',          // e.g. '15125550198'
     email: '',          // e.g. 'hello@saltandembar.com'
-    address: 'Avenue Road Section:2 , Block: A, Avenue:1 , House: 12/1, Dhaka 1216',
-    phone: '01908327868',
+    address: 'Brand Address',
+    phone: 'Brand Phone Number',
     hours: 'Mon–Thu 4–10 PM · Fri–Sat 4–11 PM · Sun 4–9 PM',
   },
   // Add more business slugs here as needed
@@ -39,17 +39,17 @@ const BUSINESS_CONFIGS = {
  */
 function applyBusinessConfig() {
   const params = new URLSearchParams(window.location.search);
-  const slug = params.get('business') || 'pizzaberg';
+  const slug = params.get('business') || 'Brand Name';
   const config = BUSINESS_CONFIGS[slug];
 
   if (!config) {
-    console.warn(`[Pizzaberg] No config found for business slug: "${slug}"`);
+    console.warn(`[Brand Name] No config found for business slug: "${slug}"`);
     return;
   }
 
   // Expose config globally so other functions can reference it
   window.SE_CONFIG = config;
-  console.log('[Pizzaberg] Loaded config for:', config.name);
+  console.log('[Brand Name] Loaded config for:', config.name);
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -196,7 +196,7 @@ function submitFeedback() {
   const config = window.SE_CONFIG || {};
 
   const payload = {
-    business: config.name || 'Pizzaberg',
+    business: config.name || 'Brand Name',
     categories,
     comment,
     contact,
@@ -208,7 +208,7 @@ function submitFeedback() {
 
   if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL === 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
     // Fallback: URL not configured yet
-    console.log('[Pizzaberg] Form Data (Not saved yet):', payload);
+    console.log('[Brand Name] Form Data (Not saved yet):', payload);
     document.getElementById('feedbackFormView').style.display = 'none';
     document.getElementById('feedbackSuccess').classList.add('show');
     return;
@@ -283,7 +283,7 @@ function submitPromo() {
   const config = window.SE_CONFIG || {};
   const payload = {
     formType: 'birthday',
-    business: config.name || 'Pizzaberg',
+    business: config.name || 'Brand Name',
     name,
     birthDate,
     mobileNumber,
